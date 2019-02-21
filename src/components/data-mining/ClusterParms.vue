@@ -137,7 +137,7 @@
 
 <script>
   import Bus from './Bus.js';
-  import _ from 'lodash';
+  import debounce from '../../utils/debounce';
 
   export default {
     name: 'drop',
@@ -269,7 +269,7 @@
       //   };
       //   Bus.$emit('getClusterParms', clusterParms)
       // }
-      clusterParmsChange: _.debounce(function () {
+      clusterParmsChange: debounce(function () {
         let clusterParms = {
           "category": this.category,
           "Datacsv_list": this.dropRow,    //聚类轴的值

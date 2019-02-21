@@ -1789,7 +1789,7 @@
         let dom = this.$refs.myChart;
         this.myChart = this.$echarts.init(dom, this.chartStyle);
         // console.log('start!!!')
-        this.myChart.showLoading();
+        this.myChart.showLoading()
         this.option = {
           animation: true,
           title: {
@@ -1842,12 +1842,12 @@
 
         // console.log('finished!!!')
         // console.log('chartXAxis: ', this.chartXAxis)
-        this.myChart.hideLoading();
+
         this.myChart.setOption(this.option, true);
         Bus.$emit('chartsOption', this.option)
+        this.myChart.hideLoading();
         this.chartBase64 = this.myChart.getDataURL()
         // console.log(this.chartBase64)
-
         console.timeEnd('drawLine')
       },
 
@@ -1863,6 +1863,9 @@
           }
           pieData.push(pieDataItem)
         }
+        console.log('pieData: ',pieData)
+        console.log('pieData: ',pieValue)
+
 
         let that = this;
 
@@ -1925,13 +1928,13 @@
           // },
           series: [
             {
-              name: '访问来源',
+              name: this.seriesData[0]['name'],
               type: 'pie',
               radius: '75%',
               center: ['40%', '50%'],
               data: pieData.sort(function (a, b) {
                 return a.value - b.value;
-              }).slice(0, 10),
+              }),
               // label: {
               //   normal: {
               //     textStyle: {

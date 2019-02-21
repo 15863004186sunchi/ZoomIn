@@ -65,7 +65,7 @@
 
 <script>
   import Bus from './Bus.js'
-  import _ from 'lodash';
+  import debounce from '../../utils/debounce';
 
   export default {
     data() {
@@ -78,15 +78,15 @@
       };
     },
     methods: {
-      testSizeChange: _.debounce(function () {
+      testSizeChange: debounce(function () {
         Bus.$emit('test_size', this.num1)
       }, 500),
 
-      mthPowerChange: _.debounce(function () {
+      mthPowerChange: debounce(function () {
         Bus.$emit('mth_power', this.num2)
       }, 500),
 
-      errorType: _.debounce(function () {
+      errorType: debounce(function () {
         Bus.$emit('error_type', this.value)
       }, 500),
     },
