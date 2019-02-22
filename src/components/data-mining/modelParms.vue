@@ -65,7 +65,7 @@
 
 <script>
   import Bus from './Bus.js'
-  import debounce from '../../utils/debounce';
+  import {debounce} from '../../utils/debounce';
 
   export default {
     data() {
@@ -78,17 +78,27 @@
       };
     },
     methods: {
+      // debounce: function(func, wait = 500) {
+      //   let timeout; // 定时器变量
+      //   return (event) => {
+      //     clearTimeout(timeout); // 每次触发时先清除上一次的定时器,然后重新计时
+      //     timeout = setTimeout(() => {
+      //       func.call(this, event);
+      //     }, wait); // 指定 xx ms 后触发真正想进行的操作 handler
+      //   };
+      // },
       testSizeChange: debounce(function () {
-        Bus.$emit('test_size', this.num1)
-      }, 500),
+          Bus.$emit('test_size', this.num1)
+        }, 250),
 
-      mthPowerChange: debounce(function () {
-        Bus.$emit('mth_power', this.num2)
-      }, 500),
 
-      errorType: debounce(function () {
-        Bus.$emit('error_type', this.value)
-      }, 500),
+      mthPowerChange: debounce(function() {
+          Bus.$emit('mth_power', this.num2)
+        }, 250),
+
+      errorType: debounce(function() {
+          Bus.$emit('error_type', this.value)
+        }, 250),
     },
     mounted() {
       Bus.$on('modelParmsFlag', (type) => {

@@ -137,7 +137,7 @@
 
 <script>
   import Bus from './Bus.js';
-  import debounce from '../../utils/debounce';
+  import {debounce} from '../../utils/debounce';
 
   export default {
     name: 'drop',
@@ -269,7 +269,7 @@
       //   };
       //   Bus.$emit('getClusterParms', clusterParms)
       // }
-      clusterParmsChange: debounce(function () {
+      clusterParmsChange: debounce( function() {
         let clusterParms = {
           "category": this.category,
           "Datacsv_list": this.dropRow,    //聚类轴的值
@@ -281,7 +281,7 @@
           'reassignment_ratio': this.num6  //reassignment ration
         };
         Bus.$emit('getClusterParms', clusterParms)
-      },500)
+      },250)
     }
   }
 </script>
