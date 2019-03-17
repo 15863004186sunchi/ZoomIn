@@ -22,22 +22,22 @@
           <!-- 由于导航栏的问题，临时下降1px -->
           <div id="drop">
             <!-- <el-card> -->
-              <!-- <el-col :span="24"> -->
-              <drop></drop>
-              <!-- </el-col> -->
-              <!-- <el-col :span="24"> -->
-              <drop-filter></drop-filter>
-              <!-- </el-col> -->
+            <!-- <el-col :span="24"> -->
+            <drop></drop>
+            <!-- </el-col> -->
+            <!-- <el-col :span="24"> -->
+            <drop-filter></drop-filter>
+            <!-- </el-col> -->
             <!-- </el-card> -->
           </div>
 
-          <div>
-            <echarts></echarts>
-          </div>
+          <!-- <div> -->
+          <echarts></echarts>
+          <!-- </div> -->
         </div>
       </div>
 
-      <div class="rightBoardStyle">
+      <div class="rightBoardStyle" id="rightBoardStyle">
         <div>
           <rightBoard/>
         </div>
@@ -113,7 +113,7 @@ export default {
 #drop {
   min-width: 1000px;
   height: 100px;
-  padding: 20px;
+  padding: 20px 30px 20px 20px;
 }
 
 ::-webkit-scrollbar-track {
@@ -154,16 +154,9 @@ export default {
 .app-border {
   position: relative;
   overflow-x: auto;
-  /* min-width: 550px; */
   height: calc(100vh - 60px);
   margin: 0 250px 0 200px;
   padding: 0 20px;
-  /* border-left: 0px;
-  border-right: 0px;
-  border-left-style: solid;
-  border-right-style: solid;
-  border-color: #d0d0d0; */
-  /*box-shadow: 0px 10px 30px 0 rgba(0,0,0,0.1) inset;*/
 }
 
 /* 顶替dataProcessing冲突的样式 */
