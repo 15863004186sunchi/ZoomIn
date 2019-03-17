@@ -4,22 +4,24 @@
       <div style="margin-top:130px" v-if="loadingUsergroupList">
         <div v-loading="loadingUsergroupList" element-loading-text="数据加载中…"></div>
       </div>
-      <div class='select-ul' id="select-ul" v-if="dragFlag">
-        <div style="display:table;text-align: left;" v-for="(textField,index) in textFields" :key="index">
-          <div class='select-item' :id=textField :name=textField draggable='true' @dragstart='drag($event)'
-               style="list-style-type:none;">
-            <svg class="icon" aria-hidden="true" style="margin-right:10px">
-              <use xlink:href="#icon-wenzi"></use>
-            </svg>{{textField}}</div>
-        </div>
-        <div style="display:table;text-align: left;" v-for="(numberField) in numberFields" :key="numberField">
-          <div class='select-item' :id=numberField :name=numberField draggable='true' @dragstart='drag($event)'
-               style="list-style-type:none; ">
-            <svg class="icon" aria-hidden="true" style="margin-right:10px">
-              <use xlink:href="#icon-wellnum"></use>
-            </svg>{{numberField}}</div>
-        </div>
-      </div> <!-- 拖动的标签 -->
+      <!-- <vue-scroll> -->
+        <div class='select-ul' id="select-ul" v-if="dragFlag">
+          <div style="display:table;text-align: left;" v-for="(textField,index) in textFields" :key="index">
+            <div class='select-item' :id=textField :name=textField draggable='true' @dragstart='drag($event)'
+                style="list-style-type:none;">
+              <svg class="icon" aria-hidden="true" style="margin-right:10px">
+                <use xlink:href="#icon-wenzi"></use>
+              </svg>{{textField}}</div>
+          </div>
+          <div style="display:table;text-align: left;" v-for="(numberField) in numberFields" :key="numberField">
+            <div class='select-item' :id=numberField :name=numberField draggable='true' @dragstart='drag($event)'
+                style="list-style-type:none; ">
+              <svg class="icon" aria-hidden="true" style="margin-right:10px">
+                <use xlink:href="#icon-wellnum"></use>
+              </svg>{{numberField}}</div>
+          </div>
+        </div> <!-- 拖动的标签 -->
+      <!-- </vue-scroll> -->
     </div>
 
 
@@ -93,12 +95,14 @@
 </script>
 
 <style scoped>
+  .drag-content{
+    margin-top: 30px;
+  }
+
   .select-ul {
     padding: 5px;
     text-align: center;
-
     cursor: pointer;
-
     color: #5A616A;
     font-family: "Microsoft YaHei", "宋体"
   }

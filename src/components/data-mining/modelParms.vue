@@ -88,17 +88,17 @@
       //   };
       // },
       testSizeChange: debounce(function () {
-          Bus.$emit('test_size', this.num1)
-        }, 250),
+        Bus.$emit('test_size', this.num1)
+      }, 250),
 
 
-      mthPowerChange: debounce(function() {
-          Bus.$emit('mth_power', this.num2)
-        }, 250),
+      mthPowerChange: debounce(function () {
+        Bus.$emit('mth_power', this.num2)
+      }, 250),
 
-      errorType: debounce(function() {
-          Bus.$emit('error_type', this.value)
-        }, 250),
+      errorType: debounce(function () {
+        Bus.$emit('error_type', this.value)
+      }, 250),
     },
     mounted() {
       Bus.$on('modelParmsFlag', (type) => {

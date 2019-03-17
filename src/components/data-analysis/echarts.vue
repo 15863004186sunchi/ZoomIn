@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="analysisCardStyle">
 
-    <el-card class="analysisCardStyle" id="echartsCard" v-loading="loading">
+    <div id="echartsCard" v-loading="loading">
       <!-- 图内筛选器部分 -->
       <div v-show="picFilterFlag" style="margin-left:16px">&nbsp;
 
@@ -46,13 +46,13 @@
         </el-table-column>
       </el-table>
 
-      <div v-show="!tableVisible">
+      <div v-show="!tableVisible&&!tableSecVisible">
         <div class="echarts-font" id="font-position">当前图表无数据</div>
         <img src="@/assets/chartBg.png" style="width:90%;height:90%;margin:40px;">
       </div>
 
       <!-- Echarts部分 -->
-      <div id="myChart" :style="{width: '0px', height: '0px'}" ref="myChart">
+      <div v-show="tableVisible&&!tableSecVisible" id="myChart" ref="myChart">
 
         <!-- 未显示图表时 -->
         <!--<div class="echarts-font" id="font-position" v-show="!tableVisible">当前图表无数据</div>-->
@@ -75,7 +75,7 @@
         </el-table>
       </div>
 
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -2303,8 +2303,15 @@
           this.winWidth = document.documentElement.clientWidth;
 
         //DIV高度为浏览器窗口的高度
-        document.getElementById("myChart").style.height = this.winHeight * 0.8 - document.getElementById('drop').offsetHeight + 20 + "px";
-        document.getElementById("myChart").style.width = this.winWidth * 0.67 + "px";
+    
+        // document.getElementById("myChart").style.height = this.winHeight * 0.8 - document.getElementById('drop').offsetHeight + 20 + "px";
+        // document.getElementById("myChart").style.width = this.winWidth * 0.67 + "px";
+
+        // document.getElementById("myChart").style.width = "1000px";
+        // document.getElementById("myChart").style.height = "500px";
+
+        // document.getElementById("echartsCard").style.minWidth = "1000px";
+
         // document.getElementById("echartsCard").style.height = this.winHeight * 0.84 + "px";
         // document.getElementById("echartsCard").style.width = this.winWidth * 0.692 + "px";
         document.getElementById("font-position").style.marginTop = this.winHeight * 0.30 + "px";
@@ -2329,11 +2336,26 @@
   }
 </script>
 <style>
-  .analysisCardStyle {
+
+  .analysisCardStyle{
+    height: calc(100vh - 200px);
+  }
+
+  #myChart{
+    width: 1000px;
+    height: 500px;
+  }
+
+  #echartsCard{
+    height: 100%;
+  }
+
+
+  /* .analysisCardStyle {
     margin: 15px;
     margin-top: 20px;
 
-  }
+  } */
 
   .echarts-font {
     font-family: '新宋体';
