@@ -17,24 +17,22 @@
         <!-- </transition> -->
       </div>
 
-      <div>
-        <div class="app-border" id="app-border">
-          <!-- 由于导航栏的问题，临时下降1px -->
-          <div id="drop">
-            <!-- <el-card> -->
-            <!-- <el-col :span="24"> -->
-            <drop></drop>
-            <!-- </el-col> -->
-            <!-- <el-col :span="24"> -->
-            <drop-filter></drop-filter>
-            <!-- </el-col> -->
-            <!-- </el-card> -->
-          </div>
-
-          <!-- <div> -->
-          <echarts></echarts>
-          <!-- </div> -->
+      <div class="app-border" id="app-border">
+        <!-- 由于导航栏的问题，临时下降1px -->
+        <div id="drop">
+          <!-- <el-card> -->
+          <!-- <el-col :span="24"> -->
+          <drop></drop>
+          <!-- </el-col> -->
+          <!-- <el-col :span="24"> -->
+          <drop-filter></drop-filter>
+          <!-- </el-col> -->
+          <!-- </el-card> -->
         </div>
+
+        <!-- <div> -->
+        <echarts></echarts>
+        <!-- </div> -->
       </div>
 
       <div class="rightBoardStyle" id="rightBoardStyle">
@@ -111,19 +109,19 @@ export default {
 
 <style scoped>
 #drop {
-  min-width: 1000px;
-  height: 100px;
-  padding: 20px 30px 20px 20px;
+  min-width: 970px;
+  min-height: 100px;
+  padding: 20px 30px 20px 0;
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 2px;
-  background: rgba(128, 133, 144, 0.06);
+  background: rgba(128, 133, 144, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  background: rgba(128, 133, 144, 0.3);
+  border-radius: 4px;
+  background: rgba(128, 133, 144, 0.2);
 }
 
 ::-webkit-scrollbar-corner {
@@ -137,8 +135,8 @@ export default {
 }
 
 ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   padding: 0;
 }
 
@@ -155,7 +153,7 @@ export default {
   position: relative;
   overflow-x: auto;
   height: calc(100vh - 60px);
-  margin: 0 250px 0 200px;
+  margin: 0 270px 0 220px;
   padding: 0 20px;
 }
 

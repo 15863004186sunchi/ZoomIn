@@ -11,7 +11,7 @@
                 <use xlink:href="#icon-wenzi"></use>
               </svg>
             </div>
-            <div style="border-bottom: 1px solid #D0D0D0;height: 40px;text-align: left" @drop='rowDrop($event)'
+            <div style="border-bottom: 1px solid #D0D0D0;min-height: 40px;text-align: left" @drop='rowDrop($event)'
                  @ondrop="removeDrop($event)" @dragover='allowDrop($event)' @ondragstart="drag(event)">
               <el-tag v-for="(item,index) in dropRow" :key="index"
                       closable
@@ -19,9 +19,9 @@
                       @close="rowRemove(index)"
                       style="margin:3px">{{item}}
               </el-tag>
-              <div>
+              <!-- <div>
                 <div class="insert-tag">&nbsp;</div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -36,7 +36,7 @@
                 <use xlink:href="#icon-wellnum"></use>
               </svg>
             </div>
-            <div style="border-bottom: 1px solid #D0D0D0;height: 40px;text-align: left;margin-top:0px"
+            <div style="border-bottom: 1px solid #D0D0D0;min-height: 40px;text-align: left;margin-top:0px"
                  @drop='colDrop($event)' @ondrop="removeDrop($event)" @dragover='allowDrop($event)'
                  @ondragstart="drag(event)">
 
@@ -275,6 +275,11 @@
 </script>
 
 <style scoped>
+  .el-input-group__append, .el-input-group__prepend{
+    vertical-align: top;
+    padding-top: 10px;
+  }
+
   .select-item-drop {
     border: 1px solid #5bc0de;
     display: inline-block;

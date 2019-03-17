@@ -1,5 +1,5 @@
 <template>
-  <div class="analysisCardStyle">
+  <div class="analysisCardStyle" id="analysisCardStyle">
     <div id="echartsCard" v-loading="loading">
       <!-- 图内筛选器部分 -->
       <div v-show="picFilterFlag" style="margin-left:16px">&nbsp;
@@ -184,9 +184,10 @@ export default {
         // document.getElementById("echartsCard").style.width = this.winWidth * 0.898 + "px";
         document.getElementById("leftBoardStyle").style.width = "20px";
         document.getElementById("rightBoardStyle").style.width = "20px";
-        document.getElementById("app-border").style.margin = 0;
+        document.getElementById("app-border").style.margin = "0 40px";
         document.getElementById("myChart").style.width = "1400px";
         document.getElementById("drop").style.minWidth = "1400px";
+        document.getElementById("analysisCardStyle").style.minWidth = "1400px";
         this.myChart.dispose();
         this.drawLine();
       } else {
@@ -195,8 +196,10 @@ export default {
         document.getElementById("leftBoardStyle").style.width = "200px";
         document.getElementById("rightBoardStyle").style.width = "250px";
         document.getElementById("app-border").style.margin = "0 250px 0 200px";
-        document.getElementById("myChart").style.width = "1000px";
-        document.getElementById("drop").style.minWidth = "1000px";
+        document.getElementById("myChart").style.width = "970px";
+        document.getElementById("drop").style.minWidth = "970px";
+        document.getElementById("analysisCardStyle").style.minWidth = "970px";
+
         this.myChart.dispose();
         this.drawLine();
       }
@@ -723,7 +726,11 @@ export default {
       console.log("rowDataRemove!!!");
 
       // 清空上一次图标的数据
-      this.myChart.dispose();
+      try{
+        this.myChart.dispose();
+      }
+      catch(err){
+      }
       this.Xdata = [];
       this.chartXAxis = {};
 
@@ -2348,11 +2355,13 @@ export default {
 </script>
 <style>
 .analysisCardStyle {
+  min-width: 970px;
   height: calc(100vh - 200px);
+  padding-right: 20px;
 }
 
 #myChart {
-  width: 1000px;
+  width: 970px;
   height: 500px;
   margin: auto;
 }
