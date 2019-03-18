@@ -152,17 +152,17 @@ import Bus from '../Bus.js'
         lineClick(type){
             switch (type) {
                 case '普通折线图':
-                    Bus.$emit('barChange','普通折线图')
+                    Bus.$emit('linkChange','普通折线图')
                     break;
                 case '面积图':
-                    Bus.$emit('barChange','面积图')
+                    Bus.$emit('linkChange','面积图')
                     break;
-                case '堆叠柱状图':
-                    Bus.$emit('lineChange','line')
-                    break;
-                case '对比柱状图':
-                    Bus.$emit('lineChange','line')
-                    break;
+                // case '堆叠柱状图':
+                //     Bus.$emit('lineChange','line')
+                //     break;
+                // case '对比柱状图':
+                //     Bus.$emit('lineChange','line')
+                //     break;
                 default:
                     break;
             }
@@ -175,12 +175,12 @@ import Bus from '../Bus.js'
                 case '气泡图':
                     Bus.$emit('scatterChange','气泡图')
                     break;
-                case '堆叠柱状图':
-                    Bus.$emit('scatterChange','scatter')
-                    break;
-                case '对比柱状图':
-                    Bus.$emit('scatterChange','scatter')
-                    break;
+                // case '堆叠柱状图':
+                //     Bus.$emit('scatterChange','scatter')
+                //     break;
+                // case '对比柱状图':
+                //     Bus.$emit('scatterChange','scatter')
+                //     break;
                 default:
                     break;
             }

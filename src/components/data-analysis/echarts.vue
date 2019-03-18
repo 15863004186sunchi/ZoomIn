@@ -92,6 +92,7 @@ export default {
   name: "echarts",
   data() {
     return {
+      infeedFlag:false,
       msg: "Welcome to Your Vue.js App",
       // 表格原始数据
       echartAxiosData: [],
@@ -188,8 +189,8 @@ export default {
         document.getElementById("myChart").style.width = "1400px";
         document.getElementById("drop").style.minWidth = "1400px";
         document.getElementById("analysisCardStyle").style.minWidth = "1400px";
-        this.myChart.dispose();
-        this.drawLine();
+        // this.myChart.dispose();
+        // this.drawLine();
       } else {
         // document.getElementById("myChart").style.width = this.winWidth * 0.67 + "px";
         // document.getElementById("echartsCard").style.width = this.winWidth * 0.692 + "px";
@@ -200,8 +201,8 @@ export default {
         document.getElementById("drop").style.minWidth = "970px";
         document.getElementById("analysisCardStyle").style.minWidth = "970px";
 
-        this.myChart.dispose();
-        this.drawLine();
+        // this.myChart.dispose();
+        // this.drawLine();
       }
     });
 
@@ -287,6 +288,9 @@ export default {
             }
           )
           .then(r => {
+            console.log("这是r: ");
+            console.log(r);
+
             for (let i = 0; i < this.yAxisItemName.length; i++) {
               this.setData(r, this.yAxisItemName[i]);
             }
@@ -726,11 +730,9 @@ export default {
       console.log("rowDataRemove!!!");
 
       // 清空上一次图标的数据
-      try{
+      try {
         this.myChart.dispose();
-      }
-      catch(err){
-      }
+      } catch (err) {}
       this.Xdata = [];
       this.chartXAxis = {};
 
@@ -869,10 +871,16 @@ export default {
 
     //3.监听图表类型改变(还没有PATCH)
     Bus.$on("barChange", type => {
+      console.log("barchange")
       this.drawLine(type);
     });
-    Bus.$on("lineChange", type => {});
+    Bus.$on("lineChange", type => {
+      console.log("linechange")
+
+    });
     Bus.$on("scatterChange", type => {
+      console.log("scatterchange")
+
       switch (type) {
         case "普通散点图":
           this.scatterDrawLine("普通散点图"); //此处传参
@@ -1709,7 +1717,7 @@ export default {
           formatter: this.XAxisFormatter
         }
       };
-
+      this.infeedFlag=false;
       switch (type) {
         case "普通柱状图":
           this.chartYAxis.type = "value";
@@ -1736,9 +1744,10 @@ export default {
           ];
           break;
         case "横向柱状图":
-          let chartAxis = this.chartYAxis;
-          this.chartYAxis = this.chartXAxis;
-          this.chartXAxis = chartAxis;
+          this.infeedFlag=true;
+          // let chartAxis = this.chartYAxis;
+          // this.chartYAxis = this.chartXAxis;
+          // this.chartXAxis = chartAxis;
           this.dataZoom = [
             {
               type: "slider",
@@ -1816,7 +1825,7 @@ export default {
         animation: true,
         title: {
           text: this.chartTitle,
-          left: "center"
+          left: "left"
         },
         tooltip: {
           trigger: "axis",
@@ -1824,24 +1833,25 @@ export default {
         },
         dataZoom: this.dataZoom,
         legend: {
+          type: "scroll",
           data: this.yAxisItemName, //拖到y轴的节点来创建图例
-          y: "center", //延Y轴居中
-          x: "right", //居右显示
-          orient: "vertical"
+          // y: !this.infeedFlag?"center":"top", //延Y轴居中
+          y: "top",
+          x: "center", //居右显示
+          orient: "horizontal"
         },
         toolbox: {
           show: true,
           feature: {
-            dataZoom: {
-              yAxisIndex: "none"
-            },
+            // dataZoom: {
+            //   // yAxisIndex: "none"
+            // },
             dataView: { readOnly: false },
             saveAsImage: {}
           }
         },
         calculable: true,
-        xAxis: this.chartXAxis,
-        yAxis: [
+        xAxis: !this.infeedFlag?this.chartXAxis:[
           {
             type: "value",
             name: this.YAxisTitle,
@@ -1858,6 +1868,24 @@ export default {
             }
           }
         ],
+        yAxis: !this.infeedFlag?[
+          {
+            type: "value",
+            name: this.YAxisTitle,
+            // nameLocation: 'start',
+            axisLine: {
+              lineStyle: {
+                width: 1
+              },
+              symbol: ["none", "arrow"]
+            },
+            axisLabel: {
+              interval: 0,
+              formatter: this.YAxisFormatter
+            }
+          }
+        ]:this.chartXAxis,
+        // yAxis: this.chartYAxis,
         series: this.seriesData
       };
       this.myChart.on("finished", function() {});
@@ -1926,18 +1954,18 @@ export default {
             color: "#5A616A"
           }
         },
-        toolbox: {
-          show: true,
-          feature: {
-            dataZoom: {
-              yAxisIndex: "none"
-            },
-            dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
-            restore: {},
-            saveAsImage: {}
-          }
-        },
+        // toolbox: {
+        //   show: true,
+        //   feature: {
+        //     // dataZoom: {
+        //     //   yAxisIndex: "none"
+        //     // },
+        //     dataView: { readOnly: false },
+        //     // magicType: { type: ["line", "bar"] },
+        //     // restore: {},
+        //     saveAsImage: {}
+        //   }
+        // },
         // visualMap: {
         //   show: false,
         //   min: 0,//此处配置颜色渐变范围
