@@ -875,7 +875,7 @@ export default {
       this.drawLine(type);
     });
     Bus.$on("lineChange", type => {
-      console.log("linechange")
+      this.drawLine(type)
 
     });
     Bus.$on("scatterChange", type => {

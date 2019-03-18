@@ -152,10 +152,10 @@ import Bus from '../Bus.js'
         lineClick(type){
             switch (type) {
                 case '普通折线图':
-                    Bus.$emit('linkChange','普通折线图')
+                    Bus.$emit('lineChange','普通折线图')
                     break;
                 case '面积图':
-                    Bus.$emit('linkChange','面积图')
+                    Bus.$emit('lineChange','面积图')
                     break;
                 // case '堆叠柱状图':
                 //     Bus.$emit('lineChange','line')
