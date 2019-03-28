@@ -4,7 +4,7 @@
     </Left>
     <el-container>
       <el-main>
-        <el-tabs v-model="activeName" type="border-card">
+        <el-tabs v-model="activeName" type="border-card" style="height: 100%">
           <el-tab-pane label="数据预览" name="first">
             <div>
               <el-row :gutter="20" style="text-align:left;padding-left:20px;margin-bottom: 0px;">
@@ -170,7 +170,7 @@
         tableLoading: true,
         tableOption: {
           border: true,
-          maxHeight: 500
+          maxHeight: document.body.clientHeight - 300
         },
 
         //修改列名
