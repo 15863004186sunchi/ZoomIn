@@ -5,7 +5,7 @@
     <el-container>
       <el-main>
         <el-tabs v-model="activeName" type="border-card" style="height: 100%">
-          <el-tab-pane label="数据预览" name="first">
+          <el-tab-pane label="数据预览" name="first" style="width:100%">
             <div>
               <el-row :gutter="20" style="text-align:left;padding-left:20px;margin-bottom: 0px;">
                 <el-button type="text" @click="showFiltrate">
