@@ -3,12 +3,12 @@
     <!--  cell-mouse-enter 和 mouseleave.native 控制鼠标离开时重置拖拽状态-->
     <el-table v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0.8)" :data="data" :border="option.border"
-              :height="option.maxHeight" :style="{ width: parseInt(option.width)+'px' }" :cell-class-name="cellClassName"
+              :height="option.maxHeight" :cell-class-name="cellClassName"
               :header-cell-class-name="headerCellClassName" @cell-mouse-enter="handleMouseLeave"
-              @mouseleave.native="handleMouseLeave" :cell-style="{padding:'0 10px',width:'auto'}">
+              @mouseleave.native="handleMouseLeave" :cell-style="{padding:'10px',textAlign:'left'}">
       <slot name="fixed"></slot>
       <el-table-column sortable v-for="(col, index) in tableHeader" :key="index" :prop="col" :label="col"
-                       :column-key="index.toString()" :render-header="renderHeader">
+                       :column-key="index.toString()" :render-header="renderHeader" min-width="150">
       </el-table-column>
     </el-table>
   </div>
