@@ -1,7 +1,7 @@
 <template>
   <el-container style="height:100%">
     <left :taskList="taskList" :selectedIndex="selectedIndex" :changeTask="changeTask"></left>
-    <el-container>
+    <el-container v-loading="loading" element-loading-text="任务加载中...">
       <el-main style="padding:0 5%;">
         <div style="margin-top:20px;">
         </div>
@@ -141,6 +141,7 @@ export default {
   data() {
     return {
       /*CJW 新增data */
+      loading:true,
       selectedIndex:0,
       myArray: [
         {
@@ -229,9 +230,13 @@ export default {
       this.$router.push("/home/task-release/"+this.taskList[index].id);
     },
     fetchTaskInfo: function() {
+      this.loading=true;
       this.$get("/taskinfo/" + this.taskId).then(response => {
+        console.log('fecthtask');
         this.newTaskModel.taskName = response.task_name;
         this.newTaskModel.taskDesc = response.task_desc;
+      }).then(()=>{
+        this.loading=false;
       });
     },
     fetchAllTaskInfo: function() {
