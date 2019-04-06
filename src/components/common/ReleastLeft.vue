@@ -10,9 +10,19 @@
         <vue-scroll :ops="ops">
           <div style="width:100%;height:100%;">
             <div class="left-search">
-              <el-select v-model="dataSetName" filterable reserve-keyword placeholder="搜索任务" style="padding:5px">
-                <el-option v-for="item in dataSetList" :key="item.id" :label="item.title" :value="item.id">
-                </el-option>
+              <el-select
+                v-model="dataSetName"
+                filterable
+                reserve-keyword
+                placeholder="搜索任务"
+                style="padding:5px"
+              >
+                <el-option
+                  v-for="(item,index) in taskList"
+                  :key="item.id"
+                  :label="item.task_name"
+                  :value="index"
+                ></el-option>
               </el-select>
             </div>
             <hr style="height:1px;border:none;border-top:1px solid #ccc">
@@ -29,15 +39,12 @@
                 <Arrow :isUp="isShowMyTask"></Arrow>
               </div>
               <ul class="my-menu" v-show="isShowMyTask">
-                <li class="active">
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
+                <li
+                  v-for="(item,index) in taskList"
+                  :key="index"
+                  @click="changeTask(index)"
+                  :class="selectedIndex===index?'active':''"
+                >{{item.task_name}}</li>
               </ul>
             </div>
             <div>
@@ -53,87 +60,7 @@
                 <Arrow :isUp="isShowShareTask"></Arrow>
               </div>
               <ul class="my-menu" v-show="isShowShareTask">
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
-                <li>
-                  我的任务1
-                </li>
-                <li>
-                  我的任务2
-                </li>
-                <li>
-                  我的任务3
-                </li>
+                <li>我的任务1</li>
               </ul>
             </div>
           </div>
@@ -150,8 +77,10 @@ export default {
     Arrow
   },
   props: {
-    dataSetList: Array,
-    dataSetId: ""
+    taskList: Array,
+    dataSetId: "",
+    selectedIndex: 0,
+    changeTask: null
   },
   data() {
     return {
@@ -167,6 +96,11 @@ export default {
         baseInfo: {}
       }
     };
+  },
+  watch:{
+    dataSetName:function(index){
+      this.changeTask(index);
+    }
   },
   computed: {
     width: function() {

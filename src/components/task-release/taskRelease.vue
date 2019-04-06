@@ -1,6 +1,6 @@
 <template>
   <el-container style="height:100%">
-    <left></left>
+    <left :taskList="taskList" :selectedIndex="selectedIndex" :changeTask="changeTask"></left>
     <el-container>
       <el-main style="padding:0 5%;">
         <div style="margin-top:20px;">
@@ -141,6 +141,7 @@ export default {
   data() {
     return {
       /*CJW 新增data */
+      selectedIndex:0,
       myArray: [
         {
           id: "1",
@@ -178,8 +179,8 @@ export default {
       },
       tablejsons: "",
       titleIndex: 0,
-      taskList: "",
-      dataSetList: "",
+      taskList: [],
+      dataSetList: [],
       chartModelRules: {
         dataSetTitle: [
           { validator: validateObj.validateTitle, trigger: "change" }
@@ -199,6 +200,14 @@ export default {
     };
   },
   created: function() {
+    this.$post('/operation/chart_show/',{
+      task:2
+    }).then(res=>{
+      console.log('emmmm')
+      console.log(res)
+    })
+
+
     this.$store.commit("changeIndex", { index: "taskRelease" });
 
     let query = this.fetchAllTaskInfo();
@@ -215,9 +224,12 @@ export default {
     this.fetchAllDataSet();
   },
   methods: {
+    changeTask:function(index){
+      this.selectedIndex=index;
+      this.$router.push("/home/task-release/"+this.taskList[index].id);
+    },
     fetchTaskInfo: function() {
       this.$get("/taskinfo/" + this.taskId).then(response => {
-        console.log(response);
         this.newTaskModel.taskName = response.task_name;
         this.newTaskModel.taskDesc = response.task_desc;
       });
