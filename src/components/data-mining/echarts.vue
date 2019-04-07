@@ -216,16 +216,28 @@
 
       Bus.$on('leftChange', (e) => {
         if (e) {
-          document.getElementById("myChart").style.width = this.winWidth * 0.885 + "px";
-          // document.getElementById('myChart').style.width=document.getElementsByClassName('app-border')[0].offsetWidth+"px";
-          document.getElementById("echartsCard").style.width = this.winWidth * 0.885 + "px";
-          this.ClusterHeight = this.winWidth * 0.885 + "px";
-          console.log(document.getElementsByClassName('app-border')[0].offsetWidth)
+          // document.getElementById("myChart").style.width = this.winWidth * 0.885 + "px";
+          // // document.getElementById('myChart').style.width=document.getElementsByClassName('app-border')[0].offsetWidth+"px";
+          // document.getElementById("echartsCard").style.width = this.winWidth * 0.885 + "px";
+          // this.ClusterHeight = this.winWidth * 0.885 + "px";
+          // console.log(document.getElementsByClassName('app-border')[0].offsetWidth)
+          document.getElementById("leftBoardStyle").style.width = "20px";
+        document.getElementById("rightBoardStyle").style.width = "20px";
+        document.getElementById("app-border").style.margin = "0 40px";
+        document.getElementById("myChart").style.width = "1400px";
+        document.getElementById("drop").style.minWidth = "1400px";
+        document.getElementById("echartsCard").style.minWidth = "1400px";
         }
         else {
-          document.getElementById("myChart").style.width = this.winWidth * 0.680 + "px";
-          document.getElementById("echartsCard").style.width = this.winWidth * 0.680 + "px";
-          this.ClusterHeight = this.winWidth * 0.680 + "px";
+          // document.getElementById("myChart").style.width = this.winWidth * 0.680 + "px";
+          // document.getElementById("echartsCard").style.width = this.winWidth * 0.680 + "px";
+          // this.ClusterHeight = this.winWidth * 0.680 + "px";
+          document.getElementById("leftBoardStyle").style.width = "200px";
+        document.getElementById("rightBoardStyle").style.width = "250px";
+        document.getElementById("app-border").style.margin = "0 250px 0 200px";
+        document.getElementById("myChart").style.width = "970px";
+        document.getElementById("drop").style.minWidth = "970px";
+        document.getElementById("echartsCard").style.minWidth = "970px";
         }
 
       })
@@ -588,9 +600,10 @@
 
   .miningCardStyle {
     border: 0px;
-    margin: 15px;
-    margin-top: 20px;
-
+    /* margin: 15px; */
+    /* margin-top: 20px; */
+    margin: auto;
+    padding: 20px;
   }
 
   .echarts-font {

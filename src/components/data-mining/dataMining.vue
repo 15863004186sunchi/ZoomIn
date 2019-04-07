@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <el-row style="margin-top:1px;">
-      <el-col :span="spanParms[0]" class="leftBoardStyle">
+    <div>
+      <div class="leftBoardStyle" id="leftBoardStyle">
         <el-button @click="btnClick" class="sizeBtn" id="sizeBtn">
           <icon name="angle-left" v-show="iconFlag"></icon>
           <icon name="angle-right" v-show="!iconFlag"></icon>
@@ -10,181 +10,206 @@
           <table-info style="margin-bottom: 30px"></table-info>
           <drag></drag>
         </div>
-      </el-col>
+      </div>
 
-      <el-col :span="spanParms[1]">
-        <div class="app-border">
+        <div class="app-border" id="app-border">
           <!-- 由于导航栏的问题，临时下降1px -->
-          <el-row style="margin-top:1px;">
-            <el-card style="margin:15px;margin-bottom:-5px">
-              <el-col :span="24" v-if="status=='回归分析'">
-                <div style="margin-left:15px;margin-right:20px;margin-top:-15px">
+          <div id="drop">
+            <div>
+              <div v-if="status=='回归分析'">
+                <div>
                   <drop></drop>
                 </div>
-              </el-col>
-              <el-col :span="24" v-if="status=='回归分析'">
-                <div style="margin-top:5px;margin-left:15px;margin-bottom:10px">
+              </div>
+              <div v-if="status=='回归分析'">
+                <div>
                   <model-parms></model-parms>
                 </div>
-              </el-col>
-              <ClusterParms v-else-if="status=='聚类分析'" style="margin:-15px"></ClusterParms>
-            </el-card>
-          </el-row>
-
-          <el-row>
-            <el-col :span="8">
-              <div>
-                <echarts></echarts>
               </div>
-            </el-col>
-          </el-row>
-
-        </div>
-      </el-col>
-
-      <el-col :span="spanParms[2]">
-        <!--<vue-scroll >-->
-          <div v-show="leftFlag">
-            <rightBoard/>
+              <ClusterParms v-else-if="status=='聚类分析'" style="margin:-15px"></ClusterParms>
+            </div>
           </div>
-        <!--</vue-scroll>-->
-      </el-col>
 
-    </el-row>
+          <div>
+            <echarts></echarts>
+          </div>
+        </div>
+
+        <!--<vue-scroll >-->
+        <div v-show="leftFlag">
+          <rightBoard/>
+        </div>
+        <!--</vue-scroll>-->
+    </div>
 
     <axios-distribute></axios-distribute>
-
   </div>
 </template>
 
 <script>
-  import drag from './drag'
-  import drop from './drop'
-  import dropFilter from './dropFilter'
-  import echarts from './echarts'
-  import rightBoard from './rightBoard'
-  import AxiosDistribute from './AxiosDistribute'
-  import tableInfo from '../data-analysis/tableInfo'
-  import modelParms from './modelParms'
-  import Bus from './Bus.js'
-  import ClusterParms from './ClusterParms'
+import drag from "./drag";
+import drop from "./drop";
+import dropFilter from "./dropFilter";
+import echarts from "./echarts";
+import rightBoard from "./rightBoard";
+import AxiosDistribute from "./AxiosDistribute";
+import tableInfo from "../data-analysis/tableInfo";
+import modelParms from "./modelParms";
+import Bus from "./Bus.js";
+import ClusterParms from "./ClusterParms";
 
-  export default {
-    name: 'App',
-    components: {
-      drag: drag,
-      drop: drop,
-      echarts: echarts,
-      rightBoard: rightBoard,
-      AxiosDistribute,
-      dropFilter,
-      tableInfo,
-      modelParms,
-      ClusterParms
-    },
-    data() {
-      return {
-        isCollapse: true,
-        spanParms: [3, 17, 4],
-        hackReset: true,
-        leftFlag: true,
-        iconFlag: true,
-        status: '回归分析'
-      }
-    },
-    created() {
-      this.$store.commit('changeIndex', {index: "dataMining"})
-    },
-    mounted() {
-      document.getElementById("sizeBtn").style.marginTop = document.getElementById("app").offsetHeight / 4 + 'px';
-      Bus.$on('modelParmsFlag', (modelType) => {
-        switch (modelType) {
-          case '线性回归':
-            this.status = '回归分析'
-            break;
-          case '非线性回归':
-            this.status = '回归分析'
-            break;
-          case 'K-Means聚类':
-            this.status = '聚类分析'
-            break;
-          case 'Mini Batch K-Means聚类':
-            this.status = '聚类分析'
-            break;
+export default {
+  name: "App",
+  components: {
+    drag: drag,
+    drop: drop,
+    echarts: echarts,
+    rightBoard: rightBoard,
+    AxiosDistribute,
+    dropFilter,
+    tableInfo,
+    modelParms,
+    ClusterParms
+  },
+  data() {
+    return {
+      isCollapse: true,
+      spanParms: [3, 17, 4],
+      hackReset: true,
+      leftFlag: true,
+      iconFlag: true,
+      status: "回归分析"
+    };
+  },
+  created() {
+    this.$store.commit("changeIndex", { index: "dataMining" });
+  },
+  mounted() {
+    // document.getElementById("sizeBtn").style.marginTop =
+    //   document.getElementById("app").offsetHeight / 4 + "px";
+    Bus.$on("modelParmsFlag", modelType => {
+      switch (modelType) {
+        case "线性回归":
+          this.status = "回归分析";
+          break;
+        case "非线性回归":
+          this.status = "回归分析";
+          break;
+        case "K-Means聚类":
+          this.status = "聚类分析";
+          break;
+        case "Mini Batch K-Means聚类":
+          this.status = "聚类分析";
+          break;
 
-          default:
-            break;
-        }
-      })
-    },
-    methods: {
-      btnClick() {
-        Bus.$emit('leftChange', this.leftFlag)
-        if (this.leftFlag) this.spanParms = [1, 22, 1]
-        else this.spanParms = [3, 17, 4]
-        this.leftFlag = !this.leftFlag
-        this.iconFlag = !this.iconFlag
+        default:
+          break;
       }
+    });
+  },
+  methods: {
+    btnClick() {
+      Bus.$emit("leftChange", this.leftFlag);
+      if (this.leftFlag) this.spanParms = [1, 22, 1];
+      else this.spanParms = [3, 17, 4];
+      this.leftFlag = !this.leftFlag;
+      this.iconFlag = !this.iconFlag;
     }
   }
+};
 </script>
 
 <style scoped>
-  html {
-    overflow-x: hidden;
-    overflow-y: hidden;
+#drop {
+  min-width: 970px;
+  /* min-height: 100px; */
+  padding: 20px 0 10px 0;
+}
+html {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 
-  }
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background: rgba(128, 133, 144, 0.1);
+}
 
-  #app {
-    font-family: "Microsoft YaHei", "微软雅黑";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #5A616A;
-  }
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(128, 133, 144, 0.2);
+}
 
-  .app-border {
-    border-left: 0px;
-    border-right: 0px;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-color: #D0D0D0;
-    box-shadow: 0px -10px 10px 1px rgb(224, 224, 224) inset;
-    /* #F0F2F3 */
-    /* rgb(224, 224, 224) */
-  }
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
 
-  .dataMing-border-left {
-    border-right: 1px;
-    border-right-style: solid;
-    border-color: #D0D0D0;
-    box-shadow: -2px 0 1px -1px #888888;
-  }
+::-webkit-scrollbar-button {
+  display: block;
+  width: 0;
+  height: 0;
+}
 
-  /* 顶替dataProcessing冲突的样式 */
-  .el-row {
-    margin-bottom: 0px;
-  }
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+  padding: 0;
+}
 
-  .el-col {
-    border-radius: 0px;
-  }
+#app {
+  font-family: "Microsoft YaHei", "微软雅黑";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #5a616a;
+  overflow: hidden;
+}
 
-  .sizeBtn {
-    width: 1px;
-    position: absolute;
-    right: 0px;
-    top: 100px;
-    border: 0px;
-    z-index: 999;
-  }
+.app-border {
+  position: relative;
+  overflow-x: auto;
+  height: calc(100vh - 60px);
+  margin: 0 270px 0 220px;
+  padding: 0 20px;
+}
 
-  .leftBoardStyle {
-    padding: 20px;
-    background: #fff;
-    position: relative;
-  }
+.dataMing-border-left {
+  border-right: 1px;
+  border-right-style: solid;
+  border-color: #d0d0d0;
+  box-shadow: -2px 0 1px -1px #888888;
+}
 
+/* 顶替dataProcessing冲突的样式 */
+.el-row {
+  margin-bottom: 0px;
+}
+
+.el-col {
+  border-radius: 0px;
+}
+
+.sizeBtn {
+  width: 1px;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  border: 0px;
+  z-index: 999;
+  transform: translateY(-50%);
+}
+
+.leftBoardStyle {
+  position: fixed;
+  z-index: 3;
+  overflow-x: hidden;
+  overflow-y: auto;
+  top: 60px;
+  bottom: 0;
+  width: 200px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 10px 10px 20px -10px rgba(0, 0, 0, 0.2);
+}
 </style>
 

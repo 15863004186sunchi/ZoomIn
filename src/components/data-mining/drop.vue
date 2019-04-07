@@ -114,6 +114,7 @@
       rowDrop: function (ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("ID");//拖动的元素的ID
+        console.log('row~这是data: ',data)
         this.dropRow.push(data)
         //console.log(this.dropRow.length)
         //判定是否超过要求的范围
@@ -129,6 +130,7 @@
         }
 
         if (!this.isNumber(this.dataArray[data])) {
+          console.log(this.dataArray[data])
           this.$message({
             message: '只允许数值类型',
             showClose: true,
@@ -157,6 +159,7 @@
       colDrop: function (ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData("ID");//拖动的元素的ID
+        console.log('col~这是data: ',data)
         this.dropCol.push(data)
         Bus.$emit('coldata', data)//给echarts组件发名字
         Bus.$emit('featureConfiguration', data)//给功能配置发送消息
@@ -165,6 +168,7 @@
         //判定是否超过要求的范围
 
         if (!this.isNumber(this.dataArray[data])) {
+          // console.log(this.dataArray[data])
           this.$message({
             message: '只允许数值类型',
             showClose: true,

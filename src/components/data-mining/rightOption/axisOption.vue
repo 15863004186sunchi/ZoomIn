@@ -92,7 +92,8 @@ export default {
 }
 
 .axisOptionStyle2{
-padding-left:40px
+/* padding-left:40px */
+border:none !important;
 }
 
 .axisOptionStyle2 .el-submenu__icon-arrow{

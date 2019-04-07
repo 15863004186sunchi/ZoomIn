@@ -146,12 +146,12 @@ export default {
       myArray: [
         {
           id: "1",
-          name: "http://120.79.146.91:8000/home/ZoomInDataSet/8/Publish/173.png"
+          name: "http://120.79.146.91:8000/home/ZoomInDataSet/13/Publish/2021.png"
         },
         {
           id: "2",
           name:
-            "http://120.79.146.91:8000/home/ZoomInDataSet/2/Publish/4413593.png"
+            "http://120.79.146.91:8000/home/ZoomInDataSet/DataAnalyze/2021.png"
         },
         {
           id: "3",

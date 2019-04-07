@@ -118,7 +118,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
   .modelTypeStyle {
-    padding-left: 40px
+    /* padding-left: 40px */
+    border: none !important;
   }
 
   .modelTypeStyle .el-submenu .el-menu-item {
