@@ -170,6 +170,32 @@ export default {
     numberFilterItem
   },
   mounted() {
+    Bus.$on("saveCharts",()=>{
+      this.chartBase64 = this.myChart.getDataURL({
+        type:'png',
+      });
+      this.$axios
+        .post(
+          "http://120.79.146.91:8000/task/chart/save_chart",
+          {
+            chart_id: this.chartId,
+            data_set: this.dataSetId, //这是data_set_id
+            base_num: this.chartBase64.slice(21),
+          },
+          {
+            headers: {
+              Authorization: "JWT " + localStorage.getItem("token")
+            }
+          }
+        )
+        .then(r => {
+          // console.log(r)
+        })
+        .catch(response => {
+          console.log(this.chartBase64);
+        });
+    })
+
     this.autoDivSize(); //根据浏览器尺寸设置echarts的宽高
 
     //0.获得data_set_id
@@ -411,29 +437,29 @@ export default {
         document.getElementById("myChart").style.display = "block";
         this.tableSecVisible = false;
       }
-
-      this.chartBase64 = this.chartBase64.slice(21);
+      // console.log(this.chartBase64)
+      // this.chartBase64 = this.chartBase64.slice(21);
       ///////////图片保存接口测试//////////////
-      this.$axios
-        .post(
-          "http://120.79.146.91:8000/task/chart/save_chart",
-          {
-            chart_id: this.chartId,
-            data_set: this.dataSetId, //这是data_set_id
-            base_num: this.chartBase64
-          },
-          {
-            headers: {
-              Authorization: "JWT " + localStorage.getItem("token")
-            }
-          }
-        )
-        .then(r => {
-          // console.log(r)
-        })
-        .catch(response => {
-          console.log(this.chartBase64);
-        });
+      // this.$axios
+      //   .post(
+      //     "http://120.79.146.91:8000/task/chart/save_chart",
+      //     {
+      //       chart_id: this.chartId,
+      //       data_set: this.dataSetId, //这是data_set_id
+      //       base_num: this.chartBase64
+      //     },
+      //     {
+      //       headers: {
+      //         Authorization: "JWT " + localStorage.getItem("token")
+      //       }
+      //     }
+      //   )
+      //   .then(r => {
+      //     // console.log(r)
+      //   })
+      //   .catch(response => {
+      //     console.log(this.chartBase64);
+      //   });
       ///////////图片保存接口测试//////////////
     });
 
@@ -1896,8 +1922,10 @@ export default {
       this.myChart.setOption(this.option, true);
       Bus.$emit("chartsOption", this.option);
       this.myChart.hideLoading();
-      this.chartBase64 = this.myChart.getDataURL();
-      // console.log(this.chartBase64)
+      // this.chartBase64 = this.myChart.getDataURL({
+      //   type:'png',
+      // });
+      // console.table(this.chartBase64)
       console.timeEnd("drawLine");
     },
 

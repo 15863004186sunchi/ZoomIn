@@ -104,6 +104,7 @@
         //console.log(document.getElementById("rightBoardScrollbar").style.height)
       },
       nextClick() {
+        Bus.$emit("saveCharts");
         this.$router.push({
           name: "data-mining",
           params: {dataSetId: this.dataSetId}
