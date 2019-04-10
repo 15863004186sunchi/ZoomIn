@@ -151,6 +151,7 @@
     },
     data() {
       return {
+        taskId:58,
         dataSetId: Number, //数据集id
         dataSetList: [], //左边数据集列表
         tableData: [], //表格数据
@@ -310,6 +311,8 @@
         if (this.dataSetId == "" || typeof this.dataSetId == "undefined") {
           if (this.$route.params.id) {
             this.dataSetId = this.$route.params.id;
+            let dataSetArray = this.dataSetList;
+            this.taskId = dataSetArray.filter(item=>item.id===parseInt(this.dataSetId))[0].task;
             this.$router.push(`/home/data-processing/${this.dataSetId}`);
           } else {
             if (
@@ -321,6 +324,7 @@
             } else {
               this.IsEmptyDataSetList = false;
               this.dataSetId = this.dataSetList[0].id;
+              this.taskId=this.dataSetList[0].task;
               this.$router.push(`/home/data-processing/${this.dataSetId}`);
             }
           }
@@ -642,7 +646,7 @@
           sessionStorage.setItem("dataSetId", this.dataSetId)
           this.$router.push({
             name: "data-analysis",
-            params: {dataSetId: this.dataSetId}
+            params: {dataSetId: this.dataSetId,taskId:this.taskId}
           });
         }
       },
@@ -665,6 +669,8 @@
       $route(to, from) {
         // 对路由变化作出响应...
         this.dataSetId = to.params.id;
+        let dataSetArray = this.dataSetList;
+        this.taskId = dataSetArray.filter(item=>item.id===parseInt(this.dataSetId))[0].task;
         this.refreshData();
       }
     }

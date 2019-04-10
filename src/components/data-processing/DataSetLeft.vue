@@ -47,7 +47,8 @@ import Arrow from "../common/Arrow.vue";
 export default {
   props: {
     dataSetList: Array,
-    dataSetId: ""
+    dataSetId: "",
+    taskId:'',
   },
   data() {
     return {

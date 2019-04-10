@@ -65,10 +65,13 @@
         featureConfigurationFlag: false,
         activeNames: ['1', '2', '3', '4', '5', '6', '7'],
         rightVisiable: true,
-        dataSetId: 184
+        dataSetId: '',
+        taskId:''
       };
     },
     mounted() {
+      this.dataSetId=this.$route.params.dataSetId;
+    this.taskId=this.$route.params.taskId;
       document.getElementById('rightBoard').style.height = document.getElementById('app-border').offsetHeight-25+'px';
       // console.log(document.getElementById('app-border').offsetHeight)
       Bus.$on("featureConfigurationFlag", e => {
@@ -107,7 +110,7 @@
         Bus.$emit("saveCharts");
         this.$router.push({
           name: "data-mining",
-          params: {dataSetId: this.dataSetId}
+          params: {dataSetId: this.dataSetId,taskId:this.taskId}
         });
       }
     }

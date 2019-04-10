@@ -69,6 +69,8 @@ export default {
   },
   data() {
     return {
+      taskId:'',
+      dataSetId:'',
       isCollapse: true,
       spanParms: [3, 17, 4],
       hackReset: true,
@@ -91,6 +93,8 @@ export default {
     }
   },
   mounted() {
+    this.dataSetId=this.$route.params.dataSetId;
+    this.taskId=this.$route.params.taskId;
     console.log(document.getElementById("demo_line_02").offsetTop);
     console.log(document.getElementById("app-border").offsetHeight);
     // document.getElementById('dragCon').style.height=document.getElementById('app-border').offsetHeight-document.getElementById('demo_line_02').offsetTop-55+'px'

@@ -54,6 +54,8 @@ export default {
   },
   data() {
     return {
+      taskId:'',
+      dataSetId:'',
       input: "",
       featureConfigurationFlag: false,
       activeNames: ["1", "2", "3", "4", "5", "6"],
@@ -61,6 +63,8 @@ export default {
     };
   },
   mounted() {
+    this.taskId=this.$route.params.taskId;
+    this.dataSetId=this.$route.params.dataSetId;
     Bus.$on("featureConfigurationFlag", e => {
       this.featureConfigurationFlag = e;
     });
@@ -108,7 +112,7 @@ export default {
     nextClick() {
       this.$router.push({
         name: "task-release",
-        params: {}
+        params: {dataSetId:this.dataSetId,taskId:this.taskId}
       });
     }
   }

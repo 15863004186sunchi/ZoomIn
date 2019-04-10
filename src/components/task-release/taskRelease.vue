@@ -18,8 +18,8 @@
 
         <!-- CJW的拖拽和放大-开始 -->
 
-        <draggable v-model="myArray" :options="{group:'people'}" @start="drag=true" @end="drag=false">
-          <div v-for="element in myArray" :key="element.id" style="width:400px;float:left;margin:10px">
+        <draggable v-model="myArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+          <div v-for="element in myArray" :key="element.id" style="width:350px;margin:10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>图表标题</span>
@@ -36,7 +36,7 @@
                   </el-dropdown>
                 </div>
               </div>
-              <img :src="element.name" style="width:100%" class="image">
+              <img :src="element.name" width="100%" height="185px" class="image">
             </el-card>
           </div>
         </draggable>
@@ -140,29 +140,16 @@ export default {
   },
   data() {
     return {
-      /*CJW 新增data */
+      analyzeArray:[],
+      clusteringArray:[],
+      regressionArray:[],
       loading:true,
       selectedIndex:0,
-      myArray: [
-        {
-          id: "1",
-          name: "http://120.79.146.91:8000/home/ZoomInDataSet/13/Publish/2021.png"
-        },
-        {
-          id: "2",
-          name:
-            "http://120.79.146.91:8000/home/ZoomInDataSet/DataAnalyze/2021.png"
-        },
-        {
-          id: "3",
-          name:
-            "http://120.79.146.91:8000/home/ZoomInDataSet/2/Publish/3251212.png"
-        }
-      ],
+      myArray: [],
       picPath: "",
       picDialogVisible: false,
-      /*CJW 新增data */
       taskId: "",
+      dataSetId:'',
       newChartDialogVisible: false,
       newChartTaskDialogVisible: false,
       tablePreviewVisable: false,
@@ -201,38 +188,51 @@ export default {
     };
   },
   created: function() {
-    this.$post('/operation/chart_show/',{
-      task:2
-    }).then(res=>{
-      console.log('emmmm')
-      console.log(res)
-    })
-
+    this.taskId=this.$route.params.taskId;
+    this.dataSetId=this.$route.params.dataSetId;
 
     this.$store.commit("changeIndex", { index: "taskRelease" });
 
     let query = this.fetchAllTaskInfo();
     query.then(req => {
       this.taskList = req;
-      if (this.$route.params.id == undefined || this.$route.params.id == "") {
+      if (this.taskId == undefined || this.taskId == "") {
         this.$router.push("/home/task-release/" + this.taskList[0].id);
+        this.$post("/publish/", {
+        task_id: this.taskList[0].id
+      }).then(response => {
+        this.report = response;
+        this.dealAllReportUrl();
+      });
+      this.selectedIndex = 0;
       } else {
-        this.taskId = this.$route.params.id;
+        this.$router.push("/home/task-release/" + this.taskId);
         this.fetchTaskInfo();
         this.fetchReport();
+        this.$post("/publish/", {
+        task_id: this.taskId
+      }).then(response => {
+        this.report = response;
+        this.dealAllReportUrl();
+      });
+      this.selectedIndex = this.taskList.findIndex(item=>item.id===this.taskId)
       }
     });
     this.fetchAllDataSet();
+    
+  },
+  mounted(){
+    
   },
   methods: {
     changeTask:function(index){
       this.selectedIndex=index;
+      this.taskId = this.taskList[index].id;
       this.$router.push("/home/task-release/"+this.taskList[index].id);
     },
     fetchTaskInfo: function() {
       this.loading=true;
       this.$get("/taskinfo/" + this.taskId).then(response => {
-        console.log('fecthtask');
         this.newTaskModel.taskName = response.task_name;
         this.newTaskModel.taskDesc = response.task_desc;
       }).then(()=>{
@@ -366,6 +366,10 @@ export default {
         task_id: this.taskId
       }).then(response => {
         this.report = response;
+        const myArray=response.data_set[0];
+        this.analyzeArray=myArray.data_analyze;
+        this.clusteringArray=myArray.data_mining_clustering;
+        this.regressionArray=myArray.data_mining_regression;
         this.dealAllReportUrl();
       });
     },
@@ -424,17 +428,22 @@ export default {
   watch: {
     $route(to, from) {
       // 对路由变化作出响应...
-      this.taskId = to.params.id;
       if (this.taskId == undefined) {
         this.$router.push("/home/task-release/" + this.taskList[0].id);
       }
       this.fetchTaskInfo();
+      this.fetchReport();
     }
   }
 };
 </script>
 
 <style>
+.table-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .task-title {
   border-bottom: 2px solid #ccc;
   padding-bottom: 5px;
