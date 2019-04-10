@@ -16,10 +16,9 @@
           <div style="clear:both"></div>
         </div>
 
-        <!-- CJW的拖拽和放大-开始 -->
-
-        <draggable v-model="myArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
-          <div v-for="element in myArray" :key="element.id" style="width:350px;margin:10px">
+        <div>数据分析</div>
+        <draggable v-model="analyzeArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+          <div v-for="element in analyzeArray" :key="element.id" style="width:350px;margin:10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>图表标题</span>
@@ -36,7 +35,53 @@
                   </el-dropdown>
                 </div>
               </div>
-              <img :src="element.name" width="100%" height="185px" class="image">
+              <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
+            </el-card>
+          </div>
+        </draggable>
+        <div>数据挖掘（线性回归）</div>
+        <draggable v-model="clusteringArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+          <div v-for="element in clusteringArray" :key="element.id" style="width:350px;margin:10px">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>图表标题</span>
+                <div class="dropdown" style="float: right;">
+                  <el-dropdown @command="extendClick">
+                    <span class="el-dropdown-link">
+                      <el-button style="float: right; padding: 3px 0" type="text"><i class="el-icon-more-outline"></i></el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item :command="element.name">放大</el-dropdown-item>
+                      <el-dropdown-item command="编辑">编辑</el-dropdown-item>
+                      <el-dropdown-item>删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </div>
+              <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
+            </el-card>
+          </div>
+        </draggable>
+        <div>数据挖掘（非线性回归）</div>
+        <draggable v-model="regressionArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+          <div v-for="element in regressionArray" :key="element.id" style="width:350px;margin:10px">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>图表标题</span>
+                <div class="dropdown" style="float: right;">
+                  <el-dropdown @command="extendClick">
+                    <span class="el-dropdown-link">
+                      <el-button style="float: right; padding: 3px 0" type="text"><i class="el-icon-more-outline"></i></el-button>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item :command="element.name">放大</el-dropdown-item>
+                      <el-dropdown-item command="编辑">编辑</el-dropdown-item>
+                      <el-dropdown-item>删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </div>
+              <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
             </el-card>
           </div>
         </draggable>
@@ -45,7 +90,6 @@
           <img :src="picPath" style="width:100%" class="image">
         </el-dialog>
 
-        <!-- CJW的拖拽和放大-结束 -->
 
       </el-main>
     </el-container>
