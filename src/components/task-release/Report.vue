@@ -26,7 +26,7 @@
           </span>
           <br>
           <div class="report-pic">
-            <img v-for="(pic,index) in dataAnalysisPic" :key="index" :src="`data:iamge/jpeg;base64,${pic}`" />
+            <img v-for="(pic,index) in dataAnalysisPic" :key="index" :src="`http://120.79.146.91:8000${pic}`" />
           </div>
           <p class="pad-20">
             <el-form-item label="数据分析结论：">
@@ -40,7 +40,7 @@
           </span>
           <br>
           <div class="report-pic">
-            <img v-for="(pic,index) in dataMiningPic" :key="index" :src="`data:iamge/jpeg;base64,${pic}`" />
+            <img v-for="(pic,index) in dataMiningPic" :key="index" :src="`http://120.79.146.91:8000${pic}`" />
           </div>
           <p class="pad-20">
             <el-form-item label="数据挖掘结论:">
@@ -81,10 +81,12 @@ export default {
         },
         dataAnalysis: {
           img:[],
+          base64:[],
           conclusion: this.data.dataAnalye_Summary==undefined?"":this.data.dataAnalye_Summary
         },
         dataMining: {
           img:[],
+          base64:[],
           conclusion: this.data.dataMinging_Summary==undefined?"":this.data.dataMinging_Summary
         },
         summary: {
@@ -97,7 +99,8 @@ export default {
     taskInfo:"",
     data:"",
     dataAnalysisPic: "",
-    dataMiningPic: ""
+    dataMiningPic: "",
+    changeWordLoading:null,
   },
   watch:{
     data:function(val,newVal){
@@ -106,7 +109,18 @@ export default {
     }
   },
   methods: {
+    converterUrlToBase64: function(urlList) {
+      return new Promise((resolve, rejects) => {
+        this.$post("/operation/image2base64", {
+          image_url: urlList
+        }).then(response => {
+          resolve(response);
+        });
+      });
+    },
+
     generateHtml: function() {
+      console.log('generateHtml!!');
       let html = '<html><head><title>XX任务</title><meta charset="utf-8"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><style>    .label {      color:#000;      font-weight: 600;    }    .base-item {      margin: 5px 0;    }    ul{      list-style:none;    }    img{      width:800px;    }</style></head><body style="font-size:20px;"><div class="panel panel-default"><div class="panel-heading"><h1 id="taskName" style="text-align:center">学业分析报告（任务名称）</h1></div><div class="panel-body"><div style="margin:0 auto;max-width:800px;"><div><h3>基本信息:</h3><div style="padding-left:50px;"><div class="base-item"><span class="label">编辑者：</span><span id="editor">zhp</span></div><div class="base-item"><span class="label">创建时间:</span><span id="createTime">zhp</span></div><div class="base-item"><span class="label">所用数据源</span><span id="dataSet">zhp</span></div></div></div><div><h3>数据分析:</h3><div style="padding-left:50px;"><ul id="data-analysis-pic"></ul><div class="base-item"><span class="label">数据分析结论：</span><span id="dataAnalysisConclusion">zhp</span></div></div></div><div><h3>数据挖掘:</h3><div style="padding-left:50px;"><ul id="data-mining-pic"></ul><div class="base-item"><span class="label">数据挖掘结论：</span><span id="dataMiningConclusion">zhp</span></div></div></div><div><h3>总结:</h3><div style="padding-left:50px;"><div class="base-item"><span class="label">总结：</span><span id="summaryConclusion">zhp</span></div></div></div></div></div></div></body></html>'
       let $ = cheerio.load(html);
       $("title").html(this.report.baseInfo.taskName);
@@ -115,15 +129,15 @@ export default {
       $("#createTime").html(this.report.baseInfo.createTime);
       $("#dataSet").html(this.report.baseInfo.dataSet);
       for(let i = 0 ; i < this.dataAnalysisPic.length;i++){
-        $("#data-analysis-pic").append(`<li><img src='data:iamge/jpeg;base64,${this.dataAnalysisPic[i]}'/></li>`)
+        $("#data-analysis-pic").append(`<li><img src='http://120.79.146.91:8000${this.dataAnalysisPic[i]}'/></li>`)
       }
       $("#dataAnalysisConclusion").html(this.report.dataAnalysis.conclusion);
       for(let i = 0 ; i < this.dataMiningPic.length;i++){
-        $("#data-mining-pic").append(`<li><img src='data:iamge/jpeg;base64,${this.dataMiningPic[i]}'/></li>`)
+        $("#data-mining-pic").append(`<li><img src='http://120.79.146.91:8000${this.dataMiningPic[i]}'/></li>`)
       }
       $("#dataMiningConclusion").html(this.report.dataMining.conclusion);
       $("#summaryConclusion").html(this.report.summary.conclusion);
-      console.log($.html());
+      // console.log($.html());
       var eleLink = document.createElement("a");
       eleLink.download = "text.html";
       eleLink.style.display = "none";
@@ -137,9 +151,27 @@ export default {
       document.body.removeChild(eleLink);
     },
     generateWord: function() {
+      this.changeWordLoading(true);
       const documentCreator = new DocumentCreator();
       this.report.dataAnalysis.img = this.dataAnalysisPic;
       this.report.dataMining.img = this.dataMiningPic;
+
+      this.converterUrlToBase64(this.dataAnalysisPic)
+        .then(response => {
+          this.report.dataAnalysis.base64 = response.message;
+          this.converterUrlToBase64(this.dataMiningPic).then(response => {
+            this.report.dataMining.base64 = response.message;
+          }).then(()=>{
+            const doc = documentCreator.create(this.report);
+            const packer = new Packer();
+            packer.toBlob(doc).then(blob => {
+              saveAs(blob, "报告.docx");
+              console.log("Document created successfully");
+              this.changeWordLoading(false)
+            });
+          });
+        });
+
       const doc = documentCreator.create(this.report);
       const packer = new Packer();
       packer.toBlob(doc).then(blob => {

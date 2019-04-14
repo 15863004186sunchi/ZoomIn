@@ -17,7 +17,7 @@
         </div>
 
         <div>数据分析</div>
-        <draggable v-model="analyzeArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+        <div class="table-container">
           <div v-for="element in analyzeArray" :key="element.id" style="width:350px;margin:10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -38,9 +38,9 @@
               <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
             </el-card>
           </div>
-        </draggable>
+        </div>
         <div>数据挖掘（线性回归）</div>
-        <draggable v-model="clusteringArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+        <div class="table-container">
           <div v-for="element in clusteringArray" :key="element.id" style="width:350px;margin:10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -61,9 +61,9 @@
               <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
             </el-card>
           </div>
-        </draggable>
+        </div>
         <div>数据挖掘（非线性回归）</div>
-        <draggable v-model="regressionArray" :options="{group:'people'}" @start="drag=true" @end="drag=false" class="table-container">
+        <div class="table-container">
           <div v-for="element in regressionArray" :key="element.id" style="width:350px;margin:10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -84,7 +84,7 @@
               <img :src="'http://120.79.146.91:8000'+element" width="100%" height="185px" class="image">
             </el-card>
           </div>
-        </draggable>
+        </div>
 
         <el-dialog :visible.sync="picDialogVisible" width="50%" center>
           <img :src="picPath" style="width:100%" class="image">
@@ -150,11 +150,11 @@
       </span>
     </el-dialog>
     <el-dialog title="生成预览" :visible.sync="generateReportVisable" width="40%">
-      <Report :taskInfo="newTaskModel" :data="report" :dataAnalysisPic="dataAnalysisPic" :dataMiningPic="dataMiningPic" ref="report"></Report>
+      <Report :taskInfo="newTaskModel" :data="report" :dataAnalysisPic="analyzeArray" :dataMiningPic="regressionArray" :changeWordLoading="changeWordLoading" ref="report"></Report>
       <span slot="footer" class="dialog-footer">
         <el-button @click="generateReportVisable = false">取 消</el-button>
         <el-button type="primary" @click="generateHtml()" style="">生成html链接</el-button>
-        <el-button type="primary" @click="generateWord()" style="">导出word</el-button>
+        <el-button type="primary" @click="generateWord()" style="" v-loading="wordLoading" element-loading-text="文档生成中...">导出word</el-button>
       </span>
     </el-dialog>
   </el-container>
@@ -184,6 +184,7 @@ export default {
   },
   data() {
     return {
+      wordLoading:false,
       analyzeArray:[],
       clusteringArray:[],
       regressionArray:[],
@@ -429,25 +430,28 @@ export default {
     },
     generateWord: function() {
       this.postSummary();
-      this.converterUrlToBase64(this.dataAnalysisPicUrl)
-        .then(response => {
-          this.dataAnalysisPic = response.message;
-          this.converterUrlToBase64(this.dataMiningPicUrl).then(response => {
-            this.dataMiningPic = response.message;
-            this.$refs.report.generateWord();
-          });
-        });
+      this.$refs.report.generateWord();
+
+      // this.converterUrlToBase64(this.dataAnalysisPicUrl)
+      //   .then(response => {
+      //     this.dataAnalysisPic = response.message;
+      //     this.converterUrlToBase64(this.dataMiningPicUrl).then(response => {
+      //       this.dataMiningPic = response.message;
+      //       this.$refs.report.generateWord();
+      //     });
+      //   });
     },
     generateHtml: function() {
       this.postSummary();
-      this.converterUrlToBase64(this.dataAnalysisPicUrl)
-        .then(response => {
-          this.dataAnalysisPic = response.message;
-          this.converterUrlToBase64(this.dataMiningPicUrl).then(response => {
-            this.dataMiningPic = response.message;
-            this.$refs.report.generateHtml();
-          });
-        })
+      this.$refs.report.generateHtml();
+      // this.converterUrlToBase64(this.dataAnalysisPicUrl)
+      //   .then(response => {
+      //     this.dataAnalysisPic = response.message;
+      //     this.converterUrlToBase64(this.dataMiningPicUrl).then(response => {
+      //       this.dataMiningPic = response.message;
+      //       this.$refs.report.generateHtml();
+      //     });
+      //   })
     },
     generateReport:function(){
       this.generateReportVisable = true;
@@ -455,7 +459,6 @@ export default {
         this.fetchReport();
       }
     },
-    //CJW 新增方法.........开始
     extendClick(path) {
       if (path == "编辑") {
         this.$router.push({
@@ -466,8 +469,10 @@ export default {
         this.picPath = path;
         this.picDialogVisible = true;
       }
+    },
+    changeWordLoading(status){
+      this.wordLoading=status;
     }
-    //CJW 新增方法.........结束
   },
   watch: {
     $route(to, from) {

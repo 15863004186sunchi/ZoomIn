@@ -45,7 +45,9 @@ export class DocumentCreator {
     document.createParagraph(defaultInfo.dataAnalysis.text).heading2();
     
     for(let i = 0 ; i < data.dataAnalysis.img.length;i++){
-      var base = "data:image/png;base64,"+data.dataAnalysis.img[i];
+
+      var base = "data:image/jpeg;base64,"+data.dataAnalysis.base64[i];
+      console.log(base)
       document.createImage(base,600,400);
     }
 
@@ -56,7 +58,7 @@ export class DocumentCreator {
 
     // 数据挖掘部分
     for(let i = 0 ; i < data.dataMining.img.length;i++){
-      var base = "data:image/png;base64,"+data.dataMining.img[i];
+      var base = "data:image/jpeg;base64,"+data.dataMining.base64[i];
       document.createImage(base,600,400);
     }
     document.createParagraph(defaultInfo.dataMining.text).heading2();
