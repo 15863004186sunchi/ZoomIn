@@ -2,7 +2,8 @@
   <div class="analysisCardStyle" id="analysisCardStyle">
     <div id="echartsCard" v-loading="loading">
       <!-- 图内筛选器部分 -->
-      <div v-show="picFilterFlag" style="margin-left:16px">&nbsp;
+      <div v-show="picFilterFlag" style="margin-left:16px">
+        &nbsp;
         <!-- 字段筛选器部分 -->
         <el-dropdown
           trigger="click"
@@ -92,7 +93,7 @@ export default {
   name: "echarts",
   data() {
     return {
-      infeedFlag:false,
+      infeedFlag: false,
       msg: "Welcome to Your Vue.js App",
       // 表格原始数据
       echartAxiosData: [],
@@ -170,9 +171,9 @@ export default {
     numberFilterItem
   },
   mounted() {
-    Bus.$on("saveCharts",()=>{
+    Bus.$on("saveCharts", () => {
       this.chartBase64 = this.myChart.getDataURL({
-        type:'png',
+        type: "png"
       });
       this.$axios
         .post(
@@ -180,7 +181,7 @@ export default {
           {
             chart_id: this.chartId,
             data_set: this.dataSetId, //这是data_set_id
-            base_num: this.chartBase64.slice(21),
+            base_num: this.chartBase64.slice(21)
           },
           {
             headers: {
@@ -194,7 +195,7 @@ export default {
         .catch(response => {
           console.log(this.chartBase64);
         });
-    })
+    });
 
     this.autoDivSize(); //根据浏览器尺寸设置echarts的宽高
 
@@ -897,15 +898,14 @@ export default {
 
     //3.监听图表类型改变(还没有PATCH)
     Bus.$on("barChange", type => {
-      console.log("barchange")
+      console.log("barchange");
       this.drawLine(type);
     });
     Bus.$on("lineChange", type => {
-      this.drawLine(type)
-
+      this.drawLine(type);
     });
     Bus.$on("scatterChange", type => {
-      console.log("scatterchange")
+      console.log("scatterchange");
 
       switch (type) {
         case "普通散点图":
@@ -1743,7 +1743,7 @@ export default {
           formatter: this.XAxisFormatter
         }
       };
-      this.infeedFlag=false;
+      this.infeedFlag = false;
       switch (type) {
         case "普通柱状图":
           this.chartYAxis.type = "value";
@@ -1770,7 +1770,7 @@ export default {
           ];
           break;
         case "横向柱状图":
-          this.infeedFlag=true;
+          this.infeedFlag = true;
           // let chartAxis = this.chartYAxis;
           // this.chartYAxis = this.chartXAxis;
           // this.chartXAxis = chartAxis;
@@ -1877,40 +1877,44 @@ export default {
           }
         },
         calculable: true,
-        xAxis: !this.infeedFlag?this.chartXAxis:[
-          {
-            type: "value",
-            name: this.YAxisTitle,
-            // nameLocation: 'start',
-            axisLine: {
-              lineStyle: {
-                width: 1
-              },
-              symbol: ["none", "arrow"]
-            },
-            axisLabel: {
-              interval: 0,
-              formatter: this.YAxisFormatter
-            }
-          }
-        ],
-        yAxis: !this.infeedFlag?[
-          {
-            type: "value",
-            name: this.YAxisTitle,
-            // nameLocation: 'start',
-            axisLine: {
-              lineStyle: {
-                width: 1
-              },
-              symbol: ["none", "arrow"]
-            },
-            axisLabel: {
-              interval: 0,
-              formatter: this.YAxisFormatter
-            }
-          }
-        ]:this.chartXAxis,
+        xAxis: !this.infeedFlag
+          ? this.chartXAxis
+          : [
+              {
+                type: "value",
+                name: this.YAxisTitle,
+                // nameLocation: 'start',
+                axisLine: {
+                  lineStyle: {
+                    width: 1
+                  },
+                  symbol: ["none", "arrow"]
+                },
+                axisLabel: {
+                  interval: 0,
+                  formatter: this.YAxisFormatter
+                }
+              }
+            ],
+        yAxis: !this.infeedFlag
+          ? [
+              {
+                type: "value",
+                name: this.YAxisTitle,
+                // nameLocation: 'start',
+                axisLine: {
+                  lineStyle: {
+                    width: 1
+                  },
+                  symbol: ["none", "arrow"]
+                },
+                axisLabel: {
+                  interval: 0,
+                  formatter: this.YAxisFormatter
+                }
+              }
+            ]
+          : this.chartXAxis,
         // yAxis: this.chartYAxis,
         series: this.seriesData
       };
@@ -2074,81 +2078,258 @@ export default {
 
     //绘制散点图
     scatterDrawLine(scatterType) {
-      let scatterData = [];
-      for (let i = 0; i < this.seriesData[0].data.length; i++) {
-        let scatterDataItem = [];
-        scatterDataItem.push(this.seriesData[0].data[i]);
-        scatterDataItem.push(this.seriesData[1].data[i]);
-        scatterDataItem.push(this.Xdata[i]);
-        scatterData.push(scatterDataItem);
-      }
-      switch (scatterType) {
-        case "普通散点图":
-          break;
-        case "气泡图":
-          break;
-        default:
-          break;
-      }
-
-      let dom = this.$refs.myChart;
-      this.myChart = this.$echarts.init(dom, this.chartStyle);
-      this.option = {
-        title: {
-          text: this.chartTitle,
-          subtext: "副标题"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: { type: "shadow" }
-        },
-        dataZoom: {},
-        toolbox: {
-          show: true,
-          feature: {
-            dataZoom: {
-              yAxisIndex: "none"
-            },
-            dataView: { readOnly: false },
-            magicType: { type: ["line", "bar"] },
-            restore: {},
-            saveAsImage: {},
-            myTool1: {
-              show: true,
-              title: "自定义扩展方法1",
-              icon:
-                "path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891",
-              onclick: function() {
-                alert("myToolHandler1");
-              }
-            }
-          }
-        },
-        animation: false,
-        // xAxis : this.chartXAxis,
-        // yAxis : this.chartYAxis,
-        xAxis: {},
-        yAxis: {},
-        series: [
-          {
-            symbolSize: 20,
-            data: scatterData,
-            type: "scatter",
-            label: {
-              emphasis: {
+      if (this.xAxisItem.length < 2) {
+        let scatterData = [];
+        for (let i = 0; i < this.seriesData[0].data.length; i++) {
+          let scatterDataItem = [];
+          scatterDataItem.push(this.seriesData[0].data[i]);
+          scatterDataItem.push(this.seriesData[1].data[i]);
+          scatterDataItem.push(this.Xdata[i]);
+          scatterData.push(scatterDataItem);
+        }
+        switch (scatterType) {
+          case "普通散点图":
+            break;
+          case "气泡图":
+            break;
+          default:
+            break;
+        }
+        let dom = this.$refs.myChart;
+        this.myChart = this.$echarts.init(dom, this.chartStyle);
+        this.option = {
+          title: {
+            text: this.chartTitle,
+            subtext: "副标题"
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" }
+          },
+          dataZoom: {},
+          toolbox: {
+            show: true,
+            feature: {
+              dataZoom: {
+                yAxisIndex: "none"
+              },
+              dataView: { readOnly: false },
+              magicType: { type: ["line", "bar"] },
+              restore: {},
+              saveAsImage: {},
+              myTool1: {
                 show: true,
-                formatter: function(param) {
-                  return param.data[2];
-                },
-                position: "top"
+                title: "自定义扩展方法1",
+                icon:
+                  "path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891",
+                onclick: function() {
+                  alert("myToolHandler1");
+                }
               }
             }
-          }
-        ]
-      };
+          },
+          animation: false,
+          // xAxis : this.chartXAxis,
+          // yAxis : this.chartYAxis,
+          xAxis: {},
+          yAxis: {},
+          series: [
+            {
+              symbolSize: 20,
+              data: scatterData,
+              type: "scatter",
+              label: {
+                emphasis: {
+                  show: true,
+                  formatter: function(param) {
+                    return param.data[2];
+                  },
+                  position: "top"
+                }
+              }
+            }
+          ]
+        };
 
-      this.myChart.setOption(this.option, true);
-      Bus.$emit("chartsOption", this.option);
+        this.myChart.setOption(this.option, true);
+        Bus.$emit("chartsOption", this.option);
+      } else {
+        //发送求和请求
+        var res = {};
+        this.chartMethod = this.chartMethod.join(",");
+        this.$axios
+          .post(
+            "http://120.79.146.91:8000/task/chart/result",
+            {
+              chart_id: this.chartId,
+              data_set: this.dataSetId, //这是data_set_id
+              chart_method: this.chartMethod,
+              chart_type: 4,
+              x_axis: this.xAxisString,
+              y_axis: this.yAxisString,
+              sort: -1,
+              sort_value: "",
+              filter: [
+                {
+                  field_type: 0,
+                  field_name: this.yAxisItemName[0],
+                  filter_method: ">",
+                  filter_obj: "-100000"
+                }
+              ],
+              filter_past: this.filterPast,
+              secondary_axis: "",
+              chart_method_2nd: "2",
+              chart_type_2nd: 2,
+              filter_past_logical_type: "&"
+            },
+            {
+              headers: {
+                Authorization: "JWT " + localStorage.getItem("token")
+              }
+            }
+          )
+          .then(r => {
+            this.chartMethod = this.chartMethod.split(",");
+            //格式示范
+            res = {
+              东方外语: {
+                "0": ["东方外语", "女", 289.8666666666667, 437.53333333333336],
+                "1": ["东方外语", "男", 232.8235294117647, 287.4117647058824]
+              },
+              北大希望之星: {
+                "0": [
+                  "北大希望之星",
+                  "女",
+                  126.88888888888889,
+                  415.55555555555554
+                ],
+                "1": [
+                  "北大希望之星",
+                  "男",
+                  126.53333333333333,
+                  188.66666666666666
+                ]
+              },
+              金海岸中学: {
+                "0": [
+                  "金海岸中学",
+                  "女",
+                  447.10526315789474,
+                  537.8947368421053
+                ],
+                "1": ["金海岸中学", "男", 322.05, 357.46666666666664]
+              }
+            };
+
+            res = r.data.data;
+
+            let scatterName = Object.keys(res);
+            let scatterSeries = [];
+            for (let i = 0; i < scatterName.length; i++) {
+              let dataItem = res[scatterName[i]];
+              let scatterDataArray = [];
+              for (let j = 0; j < Object.keys(dataItem).length; j++) {
+                let scatterDataItem = [];
+                scatterDataItem.push(dataItem[Object.keys(dataItem)[j]][0]);
+                scatterDataItem.push(dataItem[Object.keys(dataItem)[j]][1]);
+                scatterDataItem.push(dataItem[Object.keys(dataItem)[j]][2]);
+                scatterDataItem.push(dataItem[Object.keys(dataItem)[j]][3]);
+                scatterDataArray.push(scatterDataItem);
+              }
+              scatterSeries.push({
+                name: scatterName[i],
+                symbolSize: 20,
+                type: "scatter",
+                label: {
+                  emphasis: {
+                    show: true,
+                    formatter: function(param) {
+                      return param.data[2] + "#" + param.data[3];
+                    },
+                    position: "top"
+                  }
+                },
+                data: scatterDataArray
+              });
+            }
+
+            let dom = this.$refs.myChart;
+            this.myChart = this.$echarts.init(dom, this.chartStyle);
+            this.option = {
+              title: {
+                text: this.chartTitle,
+                subtext: "副标题"
+              },
+              tooltip: {
+                trigger: "axis",
+                axisPointer: { type: "shadow" }
+              },
+              dataZoom: {},
+              toolbox: {
+                show: true,
+                feature: {
+                  dataZoom: {
+                    yAxisIndex: "none"
+                  },
+                  dataView: { readOnly: false },
+                  magicType: { type: ["line", "bar"] },
+                  restore: {},
+                  saveAsImage: {},
+                  myTool1: {
+                    show: true,
+                    title: "自定义扩展方法1",
+                    icon:
+                      "path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891",
+                    onclick: function() {
+                      alert("myToolHandler1");
+                    }
+                  }
+                }
+              },
+              tooltip: {
+                // trigger: 'axis',
+                showDelay: 0,
+                formatter: function(params) {
+                  if (params.value.length > 1) {
+                    return (
+                      params.seriesName +
+                      " :<br/>" +
+                      params.value[0] +
+                      " <br/>" +
+                      params.value[1] +
+                      " <br/>"
+                    );
+                  } else {
+                    return (
+                      params.seriesName +
+                      " :<br/>" +
+                      params.name +
+                      " <br/>" +
+                      params.value +
+                      " <br/>"
+                    );
+                  }
+                },
+                axisPointer: {
+                  show: true,
+                  type: "cross",
+                  lineStyle: {
+                    type: "dashed",
+                    width: 1
+                  }
+                }
+              },
+              animation: false,
+              xAxis: {},
+              yAxis: {},
+              series: scatterSeries
+            };
+            this.myChart.setOption(this.option, true);
+            Bus.$emit("chartsOption", this.option);
+          })
+          .catch(response => {});
+      }
     },
 
     //图内筛选器-数值筛选-点击事件
